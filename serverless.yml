@@ -1,0 +1,78 @@
+service: solana-error-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  memorySize: 512
+  timeout: 30
+  environment:
+    NODE_ENV: ${self:provider.stage}
+    DYNAMODB_TABLE_NAME: ${self:service}-${self:provider.stage}-cache
+    AWS_BEDROCK_REGION: ${self:provider.region}
+    AWS_BEDROCK_MODEL_ID: anthropic.claude-3-sonnet-20240229-v1:0
+    AI_TEMPERATURE: '0.3'
+    AI_MAX_TOKENS: '1000'
+    AI_TIMEOUT_MS: '10000'
+    CACHE_TTL_SECONDS: '3600'
+    RATE_LIMIT_PER_MINUTE: '100'
+    LOG_LEVEL: info
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - bedrock:InvokeModel
+          Resource: 'arn:aws:bedrock:*:*:foundation-model/*'
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+          Resource: 
+            - Fn::GetAtt: [CacheTable, Arn]
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+            - ssm:GetParameters
+          Resource: 'arn:aws:ssm:${self:provider.region}:*:parameter/${self:service}/${self:provider.stage}/*'
+
+functions:
+  explainError:
+    handler: dist/index.handler
+    events:
+      - http:
+          path: /explain-error
+          method: post
+          cors: true
+          request:
+            schemas:
+              application/json: ${file(schemas/error-request.json)}
+
+resources:
+  Resources:
+    CacheTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: errorCode
+            AttributeType: S
+        KeySchema:
+          - AttributeName: errorCode
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+
+plugins:
+  - serverless-plugin-typescript
+
+custom:
+  serverless-plugin-typescript:
+    tsConfigFileLocation: './tsconfig.json'

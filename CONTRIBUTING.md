@@ -2,17 +2,17 @@
 
 Thank you for your interest in contributing! This guide will help you get started with contributing to the project.
 
-## 🤝 How to Contribute
+## How to Contribute
 
 We welcome contributions of all kinds:
-- 🐛 Bug reports and fixes
-- ✨ New features and enhancements
-- 📚 Documentation improvements
-- 🧪 Test coverage improvements
-- 🔒 Security improvements
-- 💡 Ideas and suggestions
+- Bug reports and fixes
+- New features and enhancements
+- Documentation improvements
+- Test coverage improvements
+- Security improvements
+- Ideas and suggestions
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -57,7 +57,7 @@ We welcome contributions of all kinds:
    npm test
    ```
 
-## 🛠️ Development Workflow
+## Development Workflow
 
 ### 1. Create a Feature Branch
 
@@ -128,7 +128,7 @@ git push origin feature/your-feature-name
 # Include a clear description of your changes
 ```
 
-## 📋 Pull Request Guidelines
+## Pull Request Guidelines
 
 ### PR Checklist
 
@@ -168,7 +168,7 @@ Brief description of changes made.
 Closes #123
 ```
 
-## 🧪 Testing Guidelines
+## Testing Guidelines
 
 ### Writing Tests
 
@@ -217,7 +217,7 @@ node scripts/detect-hang.js test tests/services/your-service.test.ts
 node scripts/detect-hang.js monitor npm test
 ```
 
-## 🔒 Security Guidelines
+## Security Guidelines
 
 ### Security Best Practices
 
@@ -236,7 +236,7 @@ node scripts/detect-hang.js monitor npm test
 - [ ] Security tests included
 - [ ] `npm audit` passes without high/critical issues
 
-## 📚 Documentation Standards
+## Documentation Standards
 
 ### Code Documentation
 
@@ -264,7 +264,7 @@ node scripts/detect-hang.js monitor npm test
 async explainError(errorCode: number, context?: string): Promise<ErrorExplanation>
 ```
 
-## 🎯 Areas for Contribution
+## Areas for Contribution
 
 ### High Priority
 - **Error Database Expansion**: Add more common error codes
@@ -284,7 +284,7 @@ async explainError(errorCode: number, context?: string): Promise<ErrorExplanatio
 - **Code cleanup**: Refactoring, optimization
 - **Configuration**: Environment variable improvements
 
-## 🏷️ Issue Labels
+## Issue Labels
 
 We use these labels to categorize issues:
 
@@ -297,7 +297,7 @@ We use these labels to categorize issues:
 - `performance`: Performance improvements
 - `testing`: Testing-related changes
 
-## 💬 Communication
+## Communication
 
 ### Getting Help
 
@@ -312,14 +312,14 @@ We use these labels to categorize issues:
 3. **Security Review**: Security-sensitive changes get extra review
 4. **Documentation Review**: User-facing changes reviewed for clarity
 
-## 🎉 Recognition
+## Recognition
 
 Contributors are recognized in:
 - **README.md**: Contributors section
 - **Release Notes**: Notable contributions mentioned
 - **GitHub**: Contributor graphs and statistics
 
-## 📞 Contact
+## Contact
 
 - **Maintainers**: @maintainer1, @maintainer2
 - **Security**: security@example.com
@@ -327,4 +327,4 @@ Contributors are recognized in:
 
 ---
 
-Thank you for contributing to the Solana Error Code Explanation API! Your contributions help make Solana development more accessible for everyone. 🚀
+Thank you for contributing to the Solana Error Code Explanation API! Your contributions help make Solana development more accessible for everyone.

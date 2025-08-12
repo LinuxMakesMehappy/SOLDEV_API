@@ -1,10 +1,10 @@
 # Security Policy
 
-## 🔒 Security Overview
+## Security Overview
 
 The Solana Error Code Explanation API is built with security as a primary concern. This document outlines our security practices, vulnerability reporting process, and security features.
 
-## 🛡️ Security Features
+## Security Features
 
 ### Input Validation & Sanitization
 - **Strict Type Checking**: All inputs validated using TypeScript and runtime validation
@@ -38,7 +38,7 @@ The Solana Error Code Explanation API is built with security as a primary concer
 - **Error Handling**: Secure error responses without information disclosure
 - **Hang Detection**: Automated detection and termination of stuck processes
 
-## 🚨 Vulnerability Reporting
+## Vulnerability Reporting
 
 We take security vulnerabilities seriously. If you discover a security issue, please follow responsible disclosure:
 
@@ -68,7 +68,7 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
 | **Medium** | Information disclosure, CSRF | 7 days |
 | **Low** | Minor security improvements | 30 days |
 
-## 🔍 Security Audit Results
+## Security Audit Results
 
 ### Latest Audit: January 2024
 
@@ -90,7 +90,7 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
 - [x] Encryption in transit and at rest
 - [x] Least-privilege access controls
 
-## 🛠️ Security Development Practices
+## Security Development Practices
 
 ### Secure Coding Guidelines
 
@@ -130,7 +130,7 @@ npm run lint -- --rule security/detect-*
 - [ ] Error handling tested
 ```
 
-## 🔐 Security Configuration
+## Security Configuration
 
 ### Environment Variables Security
 
@@ -178,7 +178,7 @@ const apiKey = "sk-1234567890abcdef"; // DON'T DO THIS
 }
 ```
 
-## 📋 Security Compliance
+## Security Compliance
 
 ### Standards Compliance
 
@@ -194,7 +194,7 @@ const apiKey = "sk-1234567890abcdef"; // DON'T DO THIS
 - **Annually**: Third-party security assessment
 - **Continuous**: Automated security monitoring
 
-## 🚀 Security Updates
+## Security Updates
 
 ### Staying Secure
 
@@ -211,7 +211,7 @@ const apiKey = "sk-1234567890abcdef"; // DON'T DO THIS
 - **Dependency Alerts**: Automated via Dependabot
 - **Custom Monitoring**: CloudWatch alarms for security events
 
-## 📞 Contact Information
+## Contact Information
 
 - **Security Team**: security@example.com
 - **General Support**: support@example.com

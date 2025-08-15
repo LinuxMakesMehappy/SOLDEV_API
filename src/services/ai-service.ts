@@ -120,8 +120,9 @@ Focus on Solana/Anchor-specific solutions and mention relevant tools like 'ancho
     });
 
     // Add timeout handling
+    let timeoutId: NodeJS.Timeout | undefined;
     const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         reject(new Error(`Bedrock request timeout after ${this.config.timeoutMs}ms`));
       }, this.config.timeoutMs);
     });
@@ -131,6 +132,9 @@ Focus on Solana/Anchor-specific solutions and mention relevant tools like 'ancho
         this.client.send(command),
         timeoutPromise
       ]);
+
+      // Clear timeout if request completed successfully
+      if (timeoutId) clearTimeout(timeoutId);
 
       if (!response.body) {
         throw new Error('Empty response from Bedrock');
@@ -144,6 +148,8 @@ Focus on Solana/Anchor-specific solutions and mention relevant tools like 'ancho
 
       return responseBody.content[0].text;
     } catch (error) {
+      // Clear timeout on error
+      if (timeoutId) clearTimeout(timeoutId);
       if (error instanceof Error) {
         throw error;
       }

@@ -73,17 +73,28 @@ export class ErrorCodeValidator {
       }
       code = input;
     }
-    // Handle string input (hex format)
+    // Handle string input (decimal or hex format)
     else if (typeof input === 'string') {
-      // Remove '0x' prefix if present
-      const cleanInput = input.toLowerCase().startsWith('0x') ? input.slice(2) : input;
-      
-      // Validate hex format
-      if (!/^[0-9a-f]+$/i.test(cleanInput)) {
-        throw new Error('Invalid error code format. String must be a valid hexadecimal number.');
-      }
+      // Check if it's a hex string (starts with 0x)
+      if (input.toLowerCase().startsWith('0x')) {
+        const cleanInput = input.slice(2);
+        
+        // Validate hex format
+        if (!/^[0-9a-f]+$/i.test(cleanInput)) {
+          throw new Error('Invalid error code format. String must be a valid decimal or hexadecimal number.');
+        }
 
-      code = parseInt(cleanInput, 16);
+        code = parseInt(cleanInput, 16);
+      }
+      // Otherwise treat as decimal string
+      else {
+        // Validate decimal format
+        if (!/^\d+$/.test(input)) {
+          throw new Error('Invalid error code format. String must be a valid decimal or hexadecimal number.');
+        }
+
+        code = parseInt(input, 10);
+      }
       
       if (code < this.MIN_U32 || code > this.MAX_U32) {
         throw new Error('Invalid error code format. Must be a number between 0 and 4294967295.');

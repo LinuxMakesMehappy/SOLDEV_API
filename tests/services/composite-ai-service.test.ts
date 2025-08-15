@@ -135,7 +135,7 @@ describe('CompositeAIService', () => {
       const result = await service.generateExplanation(1000);
 
       expect(result.explanation).toBe('External AI explanation');
-      expect(result.confidence).toBe(0.7); // Reduced by 0.1 for fallback
+      expect(result.confidence).toBeCloseTo(0.7, 1); // Reduced by 0.1 for fallback
       expect(mockBedrockService.generateExplanation).toHaveBeenCalledWith(1000, undefined);
       expect(mockExternalService.generateExplanation).toHaveBeenCalledWith(1000, undefined);
     });

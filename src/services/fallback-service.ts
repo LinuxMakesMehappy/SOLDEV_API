@@ -37,6 +37,7 @@ export class FallbackService {
   private aiService: CompositeAIService;
   private availability: ServiceAvailability;
   private config: FallbackConfig;
+  private recoveryTimer?: NodeJS.Timeout | undefined;
 
   constructor(envConfig: ValidatedEnvironmentConfig) {
     this.aiService = new CompositeAIService(envConfig);
@@ -161,9 +162,14 @@ export class FallbackService {
    * Schedules a check to see if AI services have recovered
    */
   private scheduleAIRecoveryCheck(): void {
+    // Clear any existing timer
+    if (this.recoveryTimer) {
+      clearTimeout(this.recoveryTimer);
+    }
+
     const recoveryDelay = 60000; // 1 minute
     
-    setTimeout(async () => {
+    this.recoveryTimer = setTimeout(async () => {
       try {
         // Try a simple health check
         const healthStatus = await this.aiService.forceHealthCheck();
@@ -265,6 +271,12 @@ export class FallbackService {
    * Cleanup method to stop background processes
    */
   cleanup(): void {
+    // Clear any pending recovery timer
+    if (this.recoveryTimer) {
+      clearTimeout(this.recoveryTimer);
+      this.recoveryTimer = undefined;
+    }
+    
     this.aiService.cleanup();
   }
 }

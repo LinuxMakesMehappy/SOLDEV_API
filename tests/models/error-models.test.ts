@@ -56,14 +56,14 @@ describe('ErrorCodeValidator', () => {
         });
       });
 
-      it('should validate hex strings without 0x prefix', () => {
+      it('should validate decimal strings', () => {
         const testCases = [
           { input: '0', expected: { code: 0, type: 'standard' } },
           { input: '1', expected: { code: 1, type: 'standard' } },
-          { input: '64', expected: { code: 100, type: 'standard' } },
-          { input: '7D0', expected: { code: 2000, type: 'anchor_constraint' } },
-          { input: '1770', expected: { code: 6000, type: 'custom' } },
-          { input: 'FFFFFFFF', expected: { code: 4294967295, type: 'custom' } }
+          { input: '100', expected: { code: 100, type: 'standard' } },
+          { input: '2000', expected: { code: 2000, type: 'anchor_constraint' } },
+          { input: '6000', expected: { code: 6000, type: 'custom' } },
+          { input: '4294967295', expected: { code: 4294967295, type: 'custom' } }
         ];
 
         testCases.forEach(({ input, expected }) => {
@@ -74,19 +74,43 @@ describe('ErrorCodeValidator', () => {
         });
       });
 
-      it('should handle mixed case hex strings', () => {
+      it('should reject hex strings without 0x prefix', () => {
         const testCases = [
+          'A0',  // Contains hex characters
+          '7D0', // Contains hex characters
+          'FF',  // Contains hex characters
+          'FFFFFFFF' // Contains hex characters
+        ];
+
+        // These should now be treated as invalid since they contain non-decimal characters
+        testCases.forEach((input) => {
+          expect(() => ErrorCodeValidator.validate(input))
+            .toThrow('Invalid error code format. String must be a valid decimal or hexadecimal number.');
+        });
+      });
+
+      it('should handle mixed case hex strings with 0x prefix', () => {
+        const validHexTestCases = [
           '0xaBcD',
+          '0XaBcD'
+        ];
+
+        validHexTestCases.forEach(input => {
+          const result = ErrorCodeValidator.validate(input);
+          expect(result.code).toBe(43981); // 0xABCD = 43981
+          expect(result.type).toBe('custom');
+        });
+
+        // These should now be treated as invalid since they don't have 0x prefix
+        const invalidTestCases = [
           'AbCd',
-          '0XaBcD',
           'ABCD',
           'abcd'
         ];
 
-        testCases.forEach(input => {
-          const result = ErrorCodeValidator.validate(input);
-          expect(result.code).toBe(43981); // 0xABCD = 43981
-          expect(result.type).toBe('custom');
+        invalidTestCases.forEach(input => {
+          expect(() => ErrorCodeValidator.validate(input))
+            .toThrow('Invalid error code format. String must be a valid decimal or hexadecimal number.');
         });
       });
     });
@@ -119,7 +143,7 @@ describe('ErrorCodeValidator', () => {
 
         invalidHexStrings.forEach(input => {
           expect(() => ErrorCodeValidator.validate(input))
-            .toThrow('Invalid error code format. String must be a valid hexadecimal number.');
+            .toThrow('Invalid error code format. String must be a valid decimal or hexadecimal number.');
         });
       });
 

@@ -27,6 +27,8 @@ export class CompositeAIService implements AIService {
   private externalService?: ExternalAIService;
   private healthStatus: ServiceHealthStatus;
   private healthCheckInterval: number = 30000; // 30 seconds
+  private periodicHealthTimer?: NodeJS.Timeout | undefined;
+  private scheduledHealthTimer?: NodeJS.Timeout | undefined;
 
   constructor(envConfig: ValidatedEnvironmentConfig) {
     // Always initialize Bedrock service
@@ -174,7 +176,7 @@ export class CompositeAIService implements AIService {
     });
 
     // Schedule periodic health checks
-    setInterval(() => {
+    this.periodicHealthTimer = setInterval(() => {
       this.performHealthCheck().catch(error => {
         console.warn('Periodic health check failed:', error);
       });
@@ -185,7 +187,12 @@ export class CompositeAIService implements AIService {
    * Schedules a health check after a delay
    */
   private scheduleHealthCheck(): void {
-    setTimeout(() => {
+    // Clear any existing scheduled timer
+    if (this.scheduledHealthTimer) {
+      clearTimeout(this.scheduledHealthTimer);
+    }
+    
+    this.scheduledHealthTimer = setTimeout(() => {
       this.performHealthCheck().catch(error => {
         console.warn('Scheduled health check failed:', error);
       });
@@ -196,8 +203,19 @@ export class CompositeAIService implements AIService {
    * Cleanup method to stop health checks
    */
   cleanup(): void {
-    // This would clear intervals if we stored references
-    // For now, just mark services as unhealthy
+    // Clear periodic health check timer
+    if (this.periodicHealthTimer) {
+      clearInterval(this.periodicHealthTimer);
+      this.periodicHealthTimer = undefined;
+    }
+    
+    // Clear scheduled health check timer
+    if (this.scheduledHealthTimer) {
+      clearTimeout(this.scheduledHealthTimer);
+      this.scheduledHealthTimer = undefined;
+    }
+    
+    // Mark services as unhealthy
     this.healthStatus.bedrock = false;
     this.healthStatus.external = false;
   }

@@ -56,6 +56,10 @@ describe('BedrockAIService', () => {
     service = new BedrockAIService(mockConfig);
   });
 
+  afterEach(() => {
+    jest.clearAllTimers();
+  });
+
   describe('constructor', () => {
     it('should initialize with correct configuration', () => {
       expect(MockedBedrockRuntimeClient).toHaveBeenCalledWith({

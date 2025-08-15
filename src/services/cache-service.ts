@@ -263,14 +263,7 @@ export class InMemoryCacheService implements CacheService {
   }
 
   /**
-   * Gets current cache size
-   */
-  size(): number {
-    return this.cache.size;
-  }
-
-  /**
-   * Destroys the cache service and cleans up resources
+   * Stops cleanup interval and clears cache
    */
   destroy(): void {
     if (this.cleanupInterval) {
@@ -278,6 +271,13 @@ export class InMemoryCacheService implements CacheService {
       this.cleanupInterval = null;
     }
     this.cache.clear();
+  }
+
+  /**
+   * Gets current cache size
+   */
+  size(): number {
+    return this.cache.size;
   }
 }
 

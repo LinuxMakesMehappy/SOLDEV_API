@@ -194,7 +194,7 @@ class ComprehensiveSecurityTester {
     {
       name: 'Deep Nested JSON DoS',
       category: 'DOS',
-      payload: JSON.parse('{"a":'.repeat(1000) + '{}' + '}'.repeat(1000)),
+      payload: JSON.parse('{"a": '.repeat(1000) + '{}' + '}'.repeat(1000)),
       expectedResult: 'BLOCKED',
       severity: 'MEDIUM',
       description: 'Deeply nested JSON DoS'
